@@ -681,12 +681,19 @@ parcelHelpers.export(exports, "initRouter", ()=>initRouter);
 var _welcome = require("./page/welcome");
 var _inicio = require("./page/Inicio");
 var _play = require("./page/play");
+const BASE_PATH = "/Piedra-papel-tijeras";
+function isGithubPages() {
+    return location.host.includes("github.io");
+}
 function initRouter(contenedor) {
     function goTo(path) {
-        history.pushState({}, "", path);
-        handleRouter(path);
-    }
+        const completePath = isGithubPages() ? BASE_PATH + path : path;
+        history.pushState({}, "", completePath);
+        handleRouter(completePath);
+    /*  history.pushState({}, "", path);
+    handleRouter(path); */ }
     function handleRouter(route) {
+        const newRoute = isGithubPages() ? route.replace(BASE_PATH, "") : route;
         const routes = [
             {
                 path: /\/welcome/,
