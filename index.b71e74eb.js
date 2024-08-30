@@ -584,8 +584,607 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"h7u1C":[function(require,module,exports) {
+var _routeTs = require("./route.ts");
+var _indexTs = require("./components/text/index.ts");
+var _indexTs1 = require("./components/botton/index.ts");
+(function() {
+    const path = location.pathname;
+    (0, _routeTs.initRouter)(document.querySelector(".root"));
+//state.initState();
+})();
 console.log("Hello World");
 
-},{}]},["fm8Gy","h7u1C"], "h7u1C", "parcelRequire7544")
+},{"./components/text/index.ts":"6Xncd","./components/botton/index.ts":"cWJqA","./route.ts":"jqJ1j"}],"6Xncd":[function(require,module,exports) {
+class Texted extends HTMLElement {
+    constructor(){
+        super();
+        this.tags = [
+            "h1",
+            "p"
+        ];
+        this.tag = "p";
+        this.shadow = this.attachShadow({
+            mode: "open"
+        });
+        const atributo = this.getAttribute("tag") || "p";
+        if (this.tags.includes(atributo)) this.tag = atributo;
+        this.render();
+    }
+    render() {
+        const rootEl = document.createElement(this.tag);
+        rootEl.textContent = this.textContent;
+        this.shadow.appendChild(rootEl);
+    }
+}
+customElements.define("my-text", Texted);
+
+},{}],"cWJqA":[function(require,module,exports) {
+class Button extends HTMLElement {
+    constructor(){
+        super();
+        this.shadow = this.attachShadow({
+            mode: "open"
+        });
+    }
+    connectedCallback() {
+        const style = document.createElement("style");
+        style.innerHTML = `
+    
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;
+        }
+        .my-button{
+            font-family: 'Odibee Sans', cursive;
+            font-size: 40px;
+            background-color: #4FB3E8; /* Celeste m\xe1s intenso */
+            color: #fff;
+            border: 4px solid #0000FF; /* Azul */
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 322px;
+            height: 80px;
+            transition: all 0.3s ease;
+        }
+        .my-button:active {
+            background-color: #3D8CBF; /* Un tono m\xe1s oscuro */
+            transform: scale(0.95);
+        }
+        @media (max-width: 460px) {
+            .my-button {
+                font-size: 30px;
+                max-width: 250px;
+                height: 60px;
+            }
+        }
+    `;
+        this.render();
+        this.shadow.appendChild(style);
+    }
+    render() {
+        this.shadow.innerHTML = `
+        <div class="container">
+            <button class="my-button">${this.textContent}</button>
+        </div>
+    `;
+    }
+}
+customElements.define("button-component", Button);
+
+},{}],"jqJ1j":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "initRouter", ()=>initRouter);
+var _welcome = require("./page/welcome");
+var _inicio = require("./page/Inicio");
+var _play = require("./page/play");
+function initRouter(contenedor) {
+    function goTo(path) {
+        history.pushState({}, "", path);
+        handleRouter(path);
+    }
+    function handleRouter(route) {
+        const routes = [
+            {
+                path: /\/welcome/,
+                component: (0, _welcome.initWelcomePage)
+            },
+            {
+                path: /\/inicio/,
+                component: (0, _inicio.initInicioPage)
+            },
+            {
+                path: /\/play/,
+                component: (0, _play.initPlayPage)
+            }
+        ];
+        for (const r of routes)if (r.path.test(route)) {
+            const el = r.component({
+                goTo: goTo
+            });
+            if (contenedor.firstChild) contenedor.firstChild.remove();
+            contenedor.appendChild(el);
+        }
+    }
+    if (location.pathname == "/") goTo("/welcome");
+    else if (location.pathname == "/inicio" || location.pathname == "/play") handleRouter(location.pathname);
+    else goTo("/welcome");
+    window.onpopstate = function(event) {
+        handleRouter(location.pathname);
+    };
+}
+
+},{"./page/welcome":"1TmYT","./page/Inicio":"WbKdY","./page/play":"li9BO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1TmYT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "initWelcomePage", ()=>initWelcomePage);
+function initWelcomePage(params) {
+    const div = document.createElement("div");
+    div.className = "root";
+    const style = document.createElement("style");
+    const imgPapel = require("d0a496d2ec4129d7");
+    const imgPiedra = require("3962121c35f59c07");
+    const imgTijera = require("6726d1b70fb89408");
+    style.innerHTML = `
+  .root{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .title{
+    font-size: 2rem;
+    font-family: 'Odibee Sans', cursive;
+    color: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+  }
+  @media (max-width: 460px) {
+    .title {
+      font-size: 1.5rem;
+    }
+  }
+  .contenedor-imagenes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px;
+  }
+  .img{
+    width: 100px;
+    height: 100px;
+  }
+  @media (max-width: 460px) {
+    .img {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  `;
+    div.innerHTML = `
+  <my-text tag="h1" class="title">Bienvenido a la aventura</my-text>
+  <my-text tag="h1" class="title">Piedra, Papel \xf3 Tijera</my-text>
+  <button-component>Empezar</button-component>
+  <div class="contenedor-imagenes">
+    <img class="img" src=${imgPiedra}>
+    <img class="img" src=${imgPapel}>
+    <img class="img" src=${imgTijera}>
+  </div>
+  `;
+    div.querySelector("button-component")?.addEventListener("click", ()=>{
+        params.goTo("/inicio");
+    });
+    div.appendChild(style);
+    return div;
+}
+
+},{"d0a496d2ec4129d7":"4QZzx","3962121c35f59c07":"fGZON","6726d1b70fb89408":"igYSj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4QZzx":[function(require,module,exports) {
+module.exports = require("5150ef752d1022b8").getBundleURL("7UhFu") + "papel.765b85ac.svg" + "?" + Date.now();
+
+},{"5150ef752d1022b8":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+}
+// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}],"fGZON":[function(require,module,exports) {
+module.exports = require("9db1f8545ca6b36c").getBundleURL("7UhFu") + "piedra.af68e151.svg" + "?" + Date.now();
+
+},{"9db1f8545ca6b36c":"lgJ39"}],"igYSj":[function(require,module,exports) {
+module.exports = require("9ac9ed1b5e146ad0").getBundleURL("7UhFu") + "tijera.03d071d8.svg" + "?" + Date.now();
+
+},{"9ac9ed1b5e146ad0":"lgJ39"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"WbKdY":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "initInicioPage", ()=>initInicioPage);
+function initInicioPage(params) {
+    const imgPapel = require("db56c33ff59367b9");
+    const imgPiedra = require("41a9b91c0b0bd2fe");
+    const imgTijera = require("83499e533a6d96e4");
+    const div = document.createElement("div");
+    div.className = "root";
+    const style = document.createElement("style");
+    style.innerHTML = `
+   .title{
+    max-width: 400px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+   }
+  .root{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+.img{
+    margin-top: 20px;
+    width: 100px;
+    height: 100px;
+  }
+@media (max-width: 460px) {
+    .img {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  .img-piedra {
+    animation: flotar1 2s ease-in-out infinite;
+  }
+  .img-papel {
+    animation: flotar2 2s ease-in-out infinite;
+  }
+  .img-tijera {
+    animation: flotar3 2s ease-in-out infinite;
+  }
+ 
+  @keyframes flotar1 {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes flotar2 {
+    0%, 100% {
+      transform: translateY(-10px);
+    }
+    50% {
+      transform: translateY(0);
+    }
+  }
+  @keyframes flotar3 {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  `;
+    div.innerHTML = `
+    <div class="title">
+        <my-text tag="h1" >Presion\xe1 jugar y eleg\xed: piedra, papel o tijera antes de que pasen los 3 segundos.</my-text>
+    </div>
+    <button-component>Jugar</button-component>
+    <div class="contenedor-imagenes">
+        <img class="img img-piedra" src=${imgPiedra}>
+        <img class="img img-papel" src=${imgPapel}>
+        <img class="img img-tijera" src=${imgTijera}>
+    </div>
+    `;
+    div.querySelector("button-component")?.addEventListener("click", ()=>{
+        params.goTo("/play");
+    });
+    div.appendChild(style);
+    return div;
+}
+
+},{"db56c33ff59367b9":"4QZzx","41a9b91c0b0bd2fe":"fGZON","83499e533a6d96e4":"igYSj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"li9BO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "initPlayPage", ()=>initPlayPage);
+var _state = require("../../state");
+function initPlayPage(params) {
+    const imgPapel = require("9e05e3844d7fe68b");
+    const imgPiedra = require("5c29f08db41fa2b3");
+    const imgTijera = require("58af06298ab2adad");
+    const div = document.createElement("div");
+    div.className = "root";
+    const style = document.createElement("style");
+    //Incerto estilos y etiquetas al div creado anteriormente
+    style.innerHTML = `
+    .root {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .contador-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+    }
+    .contador {
+      font-size: 5rem;
+      font-family: 'Odibee Sans', cursive;
+      color: #333;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .spinner {
+      width: 200px;
+      height: 200px;
+      border: 10px solid #f3f3f3;
+      border-top: 10px solid black;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .contenedor-imagenes{
+        height: 250px;
+        align-content: end;
+    }
+    .img{
+        margin-top:0px;
+        width: 100px;
+        height: 100px;
+        opacity: 0.5;
+    }
+    @media (max-width: 460px) {
+        .img {
+        width: 80px;
+        height: 80px;
+        }
+    }
+  `;
+    div.innerHTML = `
+    <div class="eleccion-pc"></div>
+    <div class="contador-container">
+      <div class="spinner"></div>
+      <div class="contador">3</div>
+    </div>
+     <div class="contenedor-imagenes">
+        <img class="img img-piedra" src=${imgPiedra}>
+        <img class="img img-papel" src=${imgPapel}>
+        <img class="img img-tijera" src=${imgTijera}>
+    </div>
+  `;
+    div.appendChild(style);
+    let tiempo = 3;
+    let seleccionRealizada = false;
+    let tiempoExpirado = false;
+    //Esta funcion se encarga de mostrar el contador de 3,2,1, ya que se ejecuta cada segundo
+    const intervalo = setInterval(()=>{
+        tiempo--;
+        if (tiempo > 0) div.querySelector(".contador").textContent = tiempo.toString();
+        else {
+            clearInterval(intervalo);
+            div.querySelector(".contador").textContent = "\xa1Ya!";
+            div.querySelector(".spinner").remove();
+            tiempoExpirado = true;
+            desactivarClicks();
+        }
+    }, 1000);
+    //Esta funcion se encarga de desactivar los clicks de las imagenes
+    //Se ejecuta cuando el tiempo del contador termina o cuando ya se ha realizado una seleccion
+    const desactivarClicks = ()=>{
+        [
+            "piedra",
+            "papel",
+            "tijera"
+        ].forEach((item)=>{
+            div.querySelector(`.img-${item}`)?.removeEventListener("click", ()=>manejarClick(item));
+        });
+    };
+    //Esta funcion se encarga de manejar el click de las imagenes
+    //Se ejecuta cuando se clickea una imagen y se verifica si ya se ha realizado una seleccion o si el tiempo del contador ha terminado
+    //Si se ha realizado una seleccion, no se ejecuta la funcion
+    const manejarClick = (elemento)=>{
+        if (seleccionRealizada || tiempoExpirado) return;
+        seleccionRealizada = true;
+        const imgSeleccionada = div.querySelector(`.img-${elemento}`);
+        imgSeleccionada.style.transition = "transform 0.3s ease-out";
+        imgSeleccionada.style.transform = "translateY(-30px)";
+        imgSeleccionada.style.opacity = "1";
+        imgSeleccionada.style.height = "150px";
+        imgSeleccionada.style.width = "150px";
+        desactivarClicks();
+    };
+    //Esta parte del codigo se ocupa de la seleccion del usuario
+    //Necesita la funcion manejarClick para que se bloquen las otras imageses al seleccionar una
+    let eleccionUsuario = "";
+    div.querySelector(".img-piedra")?.addEventListener("click", ()=>{
+        manejarClick("piedra");
+        eleccionUsuario = "piedra";
+    });
+    div.querySelector(".img-papel")?.addEventListener("click", ()=>{
+        manejarClick("papel");
+        eleccionUsuario = "papel";
+    });
+    div.querySelector(".img-tijera")?.addEventListener("click", ()=>{
+        manejarClick("tijera");
+        eleccionUsuario = "tijera";
+    });
+    //Esta funcion se ocupa de generar un numero al azar para asi realizar la eleccion de la computadora
+    //Dependiendo del numero generado, se inserta una imagen en el contenedor(div) de la eleccion de la computadora
+    const mostrarEleccionPc = ()=>{
+        const numeroAleatorio = Math.floor(Math.random() * 3) + 1;
+        if (numeroAleatorio == 1) div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgPiedra} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
+        else if (numeroAleatorio == 2) div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgPapel} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
+        else div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgTijera} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
+        return numeroAleatorio;
+    };
+    //Esta parte del codigo se ejecuta despues de 3 segundos y se encarga de:
+    //1. Remplazar el numero generado al azar con la palbra correspondiente a la eleccion de la computadora
+    //2. Llama a la funciona resultado para determinar el ganador de la partida
+    //3. Realiza un getState para obtener el estado actual del juego
+    //4. Crea un objeto con los resultados de la partida actual
+    var eleccionPc = "";
+    setTimeout(()=>{
+        if (mostrarEleccionPc() == 1) eleccionPc = "piedra";
+        else if (mostrarEleccionPc() == 2) eleccionPc = "papel";
+        else eleccionPc = "tijera";
+        const ganador = resultado(eleccionPc, eleccionUsuario);
+        console.log(ganador);
+        let puntajePc;
+        let puntajeUsuario;
+        if (ganador == "pc") {
+            puntajePc = 1;
+            puntajeUsuario = 0;
+        } else if (ganador == "usuario") {
+            puntajePc = 0;
+            puntajeUsuario = 1;
+        } else {
+            puntajePc = 0;
+            puntajeUsuario = 0;
+        }
+        const currentState = (0, _state.state).getState();
+        const objetoConMayorId = currentState.reduce((maxObj, currentObj)=>{
+            return currentObj.id > maxObj.id ? currentObj : maxObj;
+        }, currentState[0]);
+        const obj = {
+            id: objetoConMayorId.id + 1,
+            eleccionPc: eleccionPc,
+            eleccionUsuario: eleccionUsuario,
+            puntajePc: puntajePc,
+            puntajeUsuario: puntajeUsuario
+        };
+        currentState.push(obj);
+        (0, _state.state).setState(currentState);
+    }, 3000);
+    return div;
+}
+//Esta funcion se encarga de determinar el ganador de la partida
+function resultado(eleccionPc, eleccionUsuario) {
+    switch(eleccionPc){
+        case "piedra":
+            if (eleccionUsuario == "tijera") return "pc";
+            else if (eleccionUsuario == "papel") return "usuario";
+            else if (eleccionUsuario == "piedra") return "empate";
+            else return "pc";
+        case "papel":
+            if (eleccionUsuario == "tijera") return "usuario";
+            else if (eleccionUsuario == "papel") return "empate";
+            else if (eleccionUsuario == "piedra") return "pc";
+            else return "pc";
+        case "tijera":
+            if (eleccionUsuario == "tijera") return "empate";
+            else if (eleccionUsuario == "papel") return "pc";
+            else if (eleccionUsuario == "piedra") return "usuario";
+            else return "pc";
+    }
+}
+
+},{"../../state":"1Yeju","9e05e3844d7fe68b":"4QZzx","5c29f08db41fa2b3":"fGZON","58af06298ab2adad":"igYSj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1Yeju":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state);
+const state = {
+    data: [
+        {
+            id: 1,
+            eleccionPc: "",
+            eleccionUsuario: "",
+            PuntajePc: 0,
+            PuntajeUsuario: 0
+        }
+    ],
+    listener: [],
+    getState () {
+        return this.data;
+    },
+    setState (newState) {
+        console.log("Soy el state, he cambiado", this.data);
+        this.data = newState;
+        for (const cb of this.listener)cb(newState);
+        localStorage.setItem("save-state", JSON.stringify(newState));
+    },
+    subscribe (callback) {
+        this.listener.push(callback);
+    },
+    initState () {
+        const localData = localStorage.getItem("save-state") || "";
+        this.setState(JSON.parse(localData));
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fm8Gy","h7u1C"], "h7u1C", "parcelRequire7544")
 
 //# sourceMappingURL=index.b71e74eb.js.map
