@@ -584,17 +584,17 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"h7u1C":[function(require,module,exports) {
+var _stateTs = require("./state.ts");
 var _routeTs = require("./route.ts");
 var _indexTs = require("./components/text/index.ts");
 var _indexTs1 = require("./components/botton/index.ts");
 (function() {
     const path = location.pathname;
     (0, _routeTs.initRouter)(document.querySelector(".root"));
-//state.initState();
-})();
-console.log("Hello World");
+    (0, _stateTs.state).initState();
+})(); // console.log("Hello World");
 
-},{"./components/text/index.ts":"6Xncd","./components/botton/index.ts":"cWJqA","./route.ts":"jqJ1j"}],"6Xncd":[function(require,module,exports) {
+},{"./components/text/index.ts":"6Xncd","./components/botton/index.ts":"cWJqA","./route.ts":"jqJ1j","./state.ts":"1Yeju"}],"6Xncd":[function(require,module,exports) {
 class Texted extends HTMLElement {
     constructor(){
         super();
@@ -681,19 +681,18 @@ parcelHelpers.export(exports, "initRouter", ()=>initRouter);
 var _welcome = require("./page/welcome");
 var _inicio = require("./page/Inicio");
 var _play = require("./page/play");
-const BASE_PATH = "/Piedra-papel-tijeras";
+const BASE_PATH = "/piedra-papel-tijera";
 function isGithubPages() {
     return location.host.includes("github.io");
 }
 function initRouter(contenedor) {
     function goTo(path) {
-        const completePath = isGithubPages() ? BASE_PATH + path : path;
+        /* history.pushState({}, "", path);
+    handleRouter(path); */ const completePath = isGithubPages() ? BASE_PATH + path : path;
         history.pushState({}, "", completePath);
         handleRouter(completePath);
-    /*  history.pushState({}, "", path);
-    handleRouter(path); */ }
+    }
     function handleRouter(route) {
-        const newRoute = isGithubPages() ? route.replace(BASE_PATH, "") : route;
         const routes = [
             {
                 path: /\/welcome/,
@@ -1091,12 +1090,11 @@ function initPlayPage(params) {
     });
     //Esta funcion se ocupa de generar un numero al azar para asi realizar la eleccion de la computadora
     //Dependiendo del numero generado, se inserta una imagen en el contenedor(div) de la eleccion de la computadora
+    var numeroAleatorio = Math.floor(Math.random() * 3) + 1;
     const mostrarEleccionPc = ()=>{
-        const numeroAleatorio = Math.floor(Math.random() * 3) + 1;
         if (numeroAleatorio == 1) div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgPiedra} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
         else if (numeroAleatorio == 2) div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgPapel} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
         else div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgTijera} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
-        return numeroAleatorio;
     };
     //Esta parte del codigo se ejecuta despues de 3 segundos y se encarga de:
     //1. Remplazar el numero generado al azar con la palbra correspondiente a la eleccion de la computadora
@@ -1105,11 +1103,13 @@ function initPlayPage(params) {
     //4. Crea un objeto con los resultados de la partida actual
     var eleccionPc = "";
     setTimeout(()=>{
-        if (mostrarEleccionPc() == 1) eleccionPc = "piedra";
-        else if (mostrarEleccionPc() == 2) eleccionPc = "papel";
+        mostrarEleccionPc();
+        // console.log(numeroAleatorio);
+        if (numeroAleatorio == 1) eleccionPc = "piedra";
+        else if (numeroAleatorio == 2) eleccionPc = "papel";
         else eleccionPc = "tijera";
         const ganador = resultado(eleccionPc, eleccionUsuario);
-        console.log(ganador);
+        // console.log(ganador);
         let puntajePc;
         let puntajeUsuario;
         if (ganador == "pc") {
@@ -1178,7 +1178,7 @@ const state = {
         return this.data;
     },
     setState (newState) {
-        console.log("Soy el state, he cambiado", this.data);
+        // console.log("Soy el state, he cambiado", this.data);
         this.data = newState;
         for (const cb of this.listener)cb(newState);
         localStorage.setItem("save-state", JSON.stringify(newState));
