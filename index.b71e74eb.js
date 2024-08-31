@@ -693,6 +693,7 @@ function initRouter(contenedor) {
         handleRouter(completePath);
     }
     function handleRouter(route) {
+        const newRoute = isGithubPages() ? route.replace(BASE_PATH, "") : route;
         const routes = [
             {
                 path: /\/welcome/,
@@ -707,7 +708,7 @@ function initRouter(contenedor) {
                 component: (0, _play.initPlayPage)
             }
         ];
-        for (const r of routes)if (r.path.test(route)) {
+        for (const r of routes)if (r.path.test(newRoute)) {
             const el = r.component({
                 goTo: goTo
             });
