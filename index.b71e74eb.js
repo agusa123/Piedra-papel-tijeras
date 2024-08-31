@@ -687,8 +687,7 @@ function isGithubPages() {
 }
 function initRouter(contenedor) {
     function goTo(path) {
-        /* history.pushState({}, "", path);
-    handleRouter(path); */ const completePath = isGithubPages() ? BASE_PATH + path : path;
+        const completePath = isGithubPages() ? BASE_PATH + path : path;
         history.pushState({}, "", completePath);
         handleRouter(completePath);
     }
