@@ -681,7 +681,7 @@ parcelHelpers.export(exports, "initRouter", ()=>initRouter);
 var _welcome = require("./page/welcome");
 var _inicio = require("./page/Inicio");
 var _play = require("./page/play");
-const BASE_PATH = "/piedra-papel-tijera";
+const BASE_PATH = "/piedra-papel-tijera/";
 function isGithubPages() {
     return location.host.includes("github.io");
 }
