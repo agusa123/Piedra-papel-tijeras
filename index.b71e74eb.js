@@ -594,85 +594,68 @@ var _indexTs1 = require("./components/botton/index.ts");
     (0, _stateTs.state).initState();
 })(); // console.log("Hello World");
 
-},{"./components/text/index.ts":"6Xncd","./components/botton/index.ts":"cWJqA","./route.ts":"jqJ1j","./state.ts":"1Yeju"}],"6Xncd":[function(require,module,exports) {
-class Texted extends HTMLElement {
-    constructor(){
-        super();
-        this.tags = [
-            "h1",
-            "p"
-        ];
-        this.tag = "p";
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
-        const atributo = this.getAttribute("tag") || "p";
-        if (this.tags.includes(atributo)) this.tag = atributo;
-        this.render();
+},{"./state.ts":"1Yeju","./route.ts":"jqJ1j","./components/text/index.ts":"6Xncd","./components/botton/index.ts":"cWJqA"}],"1Yeju":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state);
+const state = {
+    data: [
+        {
+            id: 1,
+            eleccionPc: "",
+            eleccionUsuario: "",
+            PuntajePc: 0,
+            PuntajeUsuario: 0
+        }
+    ],
+    listener: [],
+    getState () {
+        return this.data;
+    },
+    setState (newState) {
+        // console.log("Soy el state, he cambiado", this.data);
+        this.data = newState;
+        for (const cb of this.listener)cb(newState);
+        localStorage.setItem("save-state", JSON.stringify(newState));
+    },
+    subscribe (callback) {
+        this.listener.push(callback);
+    },
+    initState () {
+        const localData = localStorage.getItem("save-state") || "";
+        this.setState(JSON.parse(localData));
     }
-    render() {
-        const rootEl = document.createElement(this.tag);
-        rootEl.textContent = this.textContent;
-        this.shadow.appendChild(rootEl);
-    }
-}
-customElements.define("my-text", Texted);
+};
 
-},{}],"cWJqA":[function(require,module,exports) {
-class Button extends HTMLElement {
-    constructor(){
-        super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
-    }
-    connectedCallback() {
-        const style = document.createElement("style");
-        style.innerHTML = `
-    
-        .container{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px;
-        }
-        .my-button{
-            font-family: 'Odibee Sans', cursive;
-            font-size: 40px;
-            background-color: #4FB3E8; /* Celeste m\xe1s intenso */
-            color: #fff;
-            border: 4px solid #0000FF; /* Azul */
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 322px;
-            height: 80px;
-            transition: all 0.3s ease;
-        }
-        .my-button:active {
-            background-color: #3D8CBF; /* Un tono m\xe1s oscuro */
-            transform: scale(0.95);
-        }
-        @media (max-width: 460px) {
-            .my-button {
-                font-size: 30px;
-                max-width: 250px;
-                height: 60px;
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
             }
-        }
-    `;
-        this.render();
-        this.shadow.appendChild(style);
-    }
-    render() {
-        this.shadow.innerHTML = `
-        <div class="container">
-            <button class="my-button">${this.textContent}</button>
-        </div>
-    `;
-    }
-}
-customElements.define("button-component", Button);
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
 },{}],"jqJ1j":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -681,7 +664,7 @@ parcelHelpers.export(exports, "initRouter", ()=>initRouter);
 var _welcome = require("./page/welcome");
 var _inicio = require("./page/Inicio");
 var _play = require("./page/play");
-const BASE_PATH = "/piedra-papel-tijera/";
+const BASE_PATH = "/Piedra-papel-tijeras";
 function isGithubPages() {
     return location.host.includes("github.io");
 }
@@ -765,12 +748,13 @@ function initWelcomePage(params) {
   }
   .img{
     width: 100px;
-    height: 100px;
+    height: auto;
+    margin: 10px;
   }
   @media (max-width: 460px) {
     .img {
       width: 80px;
-      height: 80px;
+      height: auto;
     }
   }
   `;
@@ -835,37 +819,7 @@ module.exports = require("9db1f8545ca6b36c").getBundleURL("7UhFu") + "piedra.af6
 },{"9db1f8545ca6b36c":"lgJ39"}],"igYSj":[function(require,module,exports) {
 module.exports = require("9ac9ed1b5e146ad0").getBundleURL("7UhFu") + "tijera.03d071d8.svg" + "?" + Date.now();
 
-},{"9ac9ed1b5e146ad0":"lgJ39"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"WbKdY":[function(require,module,exports) {
+},{"9ac9ed1b5e146ad0":"lgJ39"}],"WbKdY":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "initInicioPage", ()=>initInicioPage);
@@ -892,15 +846,19 @@ function initInicioPage(params) {
     align-items: center;
     height: 100vh;
   }
-.img{
+  .img{
     margin-top: 20px;
     width: 100px;
-    height: 100px;
+    height: auto;
+    margin: 10px;
   }
+    .contenedor-imagenes{
+    margin-top: 20px;
+    }
 @media (max-width: 460px) {
     .img {
       width: 80px;
-      height: 80px;
+      height: auto;
     }
   }
   .img-piedra {
@@ -977,6 +935,9 @@ function initPlayPage(params) {
       align-items: center;
       height: 100vh;
     }
+    .eleccion-pc{
+    height: 250px;
+    }
     .contador-container {
       position: relative;
       width: 200px;
@@ -1010,13 +971,15 @@ function initPlayPage(params) {
     .img{
         margin-top:0px;
         width: 100px;
-        height: 100px;
+        height: auto;
         opacity: 0.5;
+        margin: 10px;
+        height: auto;
     }
     @media (max-width: 460px) {
         .img {
         width: 80px;
-        height: 80px;
+        height: auto;
         }
     }
   `;
@@ -1069,8 +1032,8 @@ function initPlayPage(params) {
         imgSeleccionada.style.transition = "transform 0.3s ease-out";
         imgSeleccionada.style.transform = "translateY(-30px)";
         imgSeleccionada.style.opacity = "1";
-        imgSeleccionada.style.height = "150px";
-        imgSeleccionada.style.width = "150px";
+        imgSeleccionada.style.width = "100px";
+        imgSeleccionada.style.height = "auto";
         desactivarClicks();
     };
     //Esta parte del codigo se ocupa de la seleccion del usuario
@@ -1092,9 +1055,9 @@ function initPlayPage(params) {
     //Dependiendo del numero generado, se inserta una imagen en el contenedor(div) de la eleccion de la computadora
     var numeroAleatorio = Math.floor(Math.random() * 3) + 1;
     const mostrarEleccionPc = ()=>{
-        if (numeroAleatorio == 1) div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgPiedra} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
-        else if (numeroAleatorio == 2) div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgPapel} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
-        else div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgTijera} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
+        if (numeroAleatorio == 1) div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgPiedra} style="transform: rotate(180deg); opacity:1; width:100px; height:auto;">`;
+        else if (numeroAleatorio == 2) div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgPapel} style="transform: rotate(180deg); opacity:1; width:100px; height:auto;">`;
+        else div.querySelector(".eleccion-pc").innerHTML = `<img class="img" src=${imgTijera} style="transform: rotate(180deg); opacity:1; width:100px; height:auto;">`;
     };
     //Esta parte del codigo se ejecuta despues de 3 segundos y se encarga de:
     //1. Remplazar el numero generado al azar con la palbra correspondiente a la eleccion de la computadora
@@ -1159,39 +1122,86 @@ function resultado(eleccionPc, eleccionUsuario) {
     }
 }
 
-},{"../../state":"1Yeju","9e05e3844d7fe68b":"4QZzx","5c29f08db41fa2b3":"fGZON","58af06298ab2adad":"igYSj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1Yeju":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "state", ()=>state);
-const state = {
-    data: [
-        {
-            id: 1,
-            eleccionPc: "",
-            eleccionUsuario: "",
-            PuntajePc: 0,
-            PuntajeUsuario: 0
-        }
-    ],
-    listener: [],
-    getState () {
-        return this.data;
-    },
-    setState (newState) {
-        // console.log("Soy el state, he cambiado", this.data);
-        this.data = newState;
-        for (const cb of this.listener)cb(newState);
-        localStorage.setItem("save-state", JSON.stringify(newState));
-    },
-    subscribe (callback) {
-        this.listener.push(callback);
-    },
-    initState () {
-        const localData = localStorage.getItem("save-state") || "";
-        this.setState(JSON.parse(localData));
+},{"../../state":"1Yeju","9e05e3844d7fe68b":"4QZzx","5c29f08db41fa2b3":"fGZON","58af06298ab2adad":"igYSj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6Xncd":[function(require,module,exports) {
+class Texted extends HTMLElement {
+    constructor(){
+        super();
+        this.tags = [
+            "h1",
+            "p"
+        ];
+        this.tag = "p";
+        this.shadow = this.attachShadow({
+            mode: "open"
+        });
+        const atributo = this.getAttribute("tag") || "p";
+        if (this.tags.includes(atributo)) this.tag = atributo;
+        this.render();
     }
-};
+    render() {
+        const rootEl = document.createElement(this.tag);
+        rootEl.textContent = this.textContent;
+        this.shadow.appendChild(rootEl);
+    }
+}
+customElements.define("my-text", Texted);
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fm8Gy","h7u1C"], "h7u1C", "parcelRequire7544")
+},{}],"cWJqA":[function(require,module,exports) {
+class Button extends HTMLElement {
+    constructor(){
+        super();
+        this.shadow = this.attachShadow({
+            mode: "open"
+        });
+    }
+    connectedCallback() {
+        const style = document.createElement("style");
+        style.innerHTML = `
+    
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;
+        }
+        .my-button{
+            font-family: 'Odibee Sans', cursive;
+            font-size: 40px;
+            background-color: #4FB3E8; /* Celeste m\xe1s intenso */
+            color: #fff;
+            border: 4px solid #0000FF; /* Azul */
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 322px;
+            height: 80px;
+            transition: all 0.3s ease;
+        }
+        .my-button:active {
+            background-color: #3D8CBF; /* Un tono m\xe1s oscuro */
+            transform: scale(0.95);
+        }
+        @media (max-width: 460px) {
+            .my-button {
+                font-size: 30px;
+                max-width: 250px;
+                height: 60px;
+            }
+        }
+    `;
+        this.render();
+        this.shadow.appendChild(style);
+    }
+    render() {
+        this.shadow.innerHTML = `
+        <div class="container">
+            <button class="my-button">${this.textContent}</button>
+        </div>
+    `;
+    }
+}
+customElements.define("button-component", Button);
+
+},{}]},["fm8Gy","h7u1C"], "h7u1C", "parcelRequire7544")
 
 //# sourceMappingURL=index.b71e74eb.js.map
