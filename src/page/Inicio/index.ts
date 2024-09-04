@@ -1,4 +1,5 @@
 export function initInicioPage(params) {
+  const imgFondo = require("url:../../components/image/fondo.png");
   const imgPapel = require("url:../../components/image/papel.svg");
   const imgPiedra = require("url:../../components/image/piedra.svg");
   const imgTijera = require("url:../../components/image/tijera.svg");
@@ -12,24 +13,32 @@ export function initInicioPage(params) {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
+    margin: 30px auto;
    }
   .root{
+    background-image: url(${imgFondo});
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
   }
-.img{
+  .img{
     margin-top: 20px;
     width: 100px;
-    height: 100px;
+    height: 185px;
+    margin: 10px;
+  }
+  .contenedor-imagenes{
+    margin-top: 30px;
+    }
+  button-component{
+    margin-bottom: 30px;
   }
 @media (max-width: 460px) {
     .img {
       width: 80px;
-      height: 80px;
+      height: auto;
     }
   }
   .img-piedra {

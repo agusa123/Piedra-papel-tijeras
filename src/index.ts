@@ -5,7 +5,7 @@ import "./components/botton/index.ts";
 
 (function () {
   const path = location.pathname;
+
   initRouter(document.querySelector(".root")!);
-  //state.initState();
+  state.initState();
 })();
-console.log("Hello World");

@@ -2,10 +2,10 @@ const state = {
   data: [
     {
       id: 1,
-      eleccionPc: "",
-      eleccionUsuario: "",
+      eleccionPc: "piedra",
+      eleccionUsuario: "papel",
       PuntajePc: 0,
-      PuntajeUsuario: 0,
+      PuntajeUsuario: 1,
     },
   ],
   listener: [],
@@ -13,7 +13,6 @@ const state = {
     return this.data;
   },
   setState(newState) {
-    console.log("Soy el state, he cambiado", this.data);
     this.data = newState;
     for (const cb of this.listener) {
       cb(newState);

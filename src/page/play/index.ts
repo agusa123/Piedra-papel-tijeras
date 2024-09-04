@@ -1,28 +1,44 @@
 import { state } from "../../state";
-
+import { initResultadoPage } from "../resultado/index.ts";
 export function initPlayPage(params) {
+  const imgFondo = require("url:../../components/image/fondo.png");
   const imgPapel = require("url:../../components/image/papel.svg");
   const imgPiedra = require("url:../../components/image/piedra.svg");
   const imgTijera = require("url:../../components/image/tijera.svg");
   const div = document.createElement("div");
-  div.className = "root";
+  div.className = "play";
   const style = document.createElement("style");
 
   //Incerto estilos y etiquetas al div creado anteriormente
 
   style.innerHTML = `
-    .root {
+    .play {
+      background-image: url(${imgFondo});
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
+    .eleccion-pc{
+      height: 33.33%;
+    }
+    @media(min-width: 460px){
+     .contenedor-imagenes{
+        display: flex;
+        align-items: flex-start;
+      }
+     .eleccion-pc{
+        display: flex;
+        align-items: flex-end;
+      }
+    }
     .contador-container {
       position: relative;
       width: 200px;
-      height: 200px;
+      height: 33.33%;
     }
+   
     .contador {
       font-size: 5rem;
       font-family: 'Odibee Sans', cursive;
@@ -45,19 +61,30 @@ export function initPlayPage(params) {
       100% { transform: rotate(360deg); }
     }
     .contenedor-imagenes{
-        height: 250px;
+        height: 33.33%;
         align-content: end;
     }
     .img{
         margin-top:0px;
         width: 100px;
-        height: 100px;
+        height: 185px;
         opacity: 0.5;
+        margin: 10px 10px;
     }
+    .img-piedra{
+        margin-top: 0px;
+    }
+    .img-papel{
+        margin-top: 0px;
+    }
+    .img-tijera{
+        margin-top: 0px;
+    }
+
     @media (max-width: 460px) {
         .img {
         width: 80px;
-        height: 80px;
+        height: 150px;
         }
     }
   `;
@@ -120,14 +147,13 @@ export function initPlayPage(params) {
     imgSeleccionada.style.transition = "transform 0.3s ease-out";
     imgSeleccionada.style.transform = "translateY(-30px)";
     imgSeleccionada.style.opacity = "1";
-    imgSeleccionada.style.height = "150px";
-    imgSeleccionada.style.width = "150px";
-
+    imgSeleccionada.style.height = "213.3px";
+    imgSeleccionada.style.width = "auto";
     desactivarClicks();
   };
 
   //Esta parte del codigo se ocupa de la seleccion del usuario
-  //Necesita la funcion manejarClick para que se bloquen las otras imageses al seleccionar una
+  //Necesita la funcion manejarClick para que se bloqueen las otras imagenes al seleccionar una
 
   let eleccionUsuario: string = "";
   div.querySelector(".img-piedra")?.addEventListener("click", () => {
@@ -145,23 +171,21 @@ export function initPlayPage(params) {
 
   //Esta funcion se ocupa de generar un numero al azar para asi realizar la eleccion de la computadora
   //Dependiendo del numero generado, se inserta una imagen en el contenedor(div) de la eleccion de la computadora
-
+  var numeroAleatorio = Math.floor(Math.random() * 3) + 1;
   const mostrarEleccionPc = () => {
-    const numeroAleatorio = Math.floor(Math.random() * 3) + 1;
     if (numeroAleatorio == 1) {
       div.querySelector(
         ".eleccion-pc"
-      )!.innerHTML = `<img class="img" src=${imgPiedra} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
+      )!.innerHTML = `<img class="img" src=${imgPiedra} style="transform: rotate(180deg); opacity:1; height: 213px; width:auto">`;
     } else if (numeroAleatorio == 2) {
       div.querySelector(
         ".eleccion-pc"
-      )!.innerHTML = `<img class="img" src=${imgPapel} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
+      )!.innerHTML = `<img class="img" src=${imgPapel} style="transform: rotate(180deg); opacity:1; height: 213px; width:auto">`;
     } else {
       div.querySelector(
         ".eleccion-pc"
-      )!.innerHTML = `<img class="img" src=${imgTijera} style="transform: rotate(180deg); opacity:1; width:150px; height:150px;">`;
+      )!.innerHTML = `<img class="img" src=${imgTijera} style="transform: rotate(180deg); opacity:1; height: 213px; width:auto">`;
     }
-    return numeroAleatorio;
   };
 
   //Esta parte del codigo se ejecuta despues de 3 segundos y se encarga de:
@@ -172,21 +196,21 @@ export function initPlayPage(params) {
 
   var eleccionPc = "";
   setTimeout(() => {
-    if (mostrarEleccionPc() == 1) {
+    mostrarEleccionPc();
+    if (numeroAleatorio == 1) {
       eleccionPc = "piedra";
-    } else if (mostrarEleccionPc() == 2) {
+    } else if (numeroAleatorio == 2) {
       eleccionPc = "papel";
     } else {
       eleccionPc = "tijera";
     }
-    const ganador = resultado(eleccionPc, eleccionUsuario);
-    console.log(ganador);
+    const ganadorDeLaPartida = ganador(eleccionPc, eleccionUsuario);
     let puntajePc: number;
     let puntajeUsuario: number;
-    if (ganador == "pc") {
+    if (ganadorDeLaPartida == "pc") {
       puntajePc = 1;
       puntajeUsuario = 0;
-    } else if (ganador == "usuario") {
+    } else if (ganadorDeLaPartida == "usuario") {
       puntajePc = 0;
       puntajeUsuario = 1;
     } else {
@@ -194,12 +218,12 @@ export function initPlayPage(params) {
       puntajeUsuario = 0;
     }
     const currentState = state.getState();
-    const objetoConMayorId = currentState.reduce((maxObj, currentObj) => {
+    const idMayor = currentState.reduce((maxObj, currentObj) => {
       return currentObj.id > maxObj.id ? currentObj : maxObj;
     }, currentState[0]);
 
     const obj = {
-      id: objetoConMayorId.id + 1,
+      id: idMayor.id + 1,
       eleccionPc: eleccionPc,
       eleccionUsuario: eleccionUsuario,
       puntajePc: puntajePc,
@@ -208,13 +232,16 @@ export function initPlayPage(params) {
     currentState.push(obj);
     state.setState(currentState);
   }, 3000);
+  setTimeout(() => {
+    params.goTo("/resultado");
+  }, 4000);
 
   return div;
 }
 
 //Esta funcion se encarga de determinar el ganador de la partida
 
-function resultado(eleccionPc: string, eleccionUsuario: string) {
+export function ganador(eleccionPc: string, eleccionUsuario: string) {
   switch (eleccionPc) {
     case "piedra":
       if (eleccionUsuario == "tijera") {

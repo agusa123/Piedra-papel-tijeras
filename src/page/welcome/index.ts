@@ -1,4 +1,5 @@
 export function initWelcomePage(params) {
+  const imgFondo = require("url:../../components/image/fondo.png");
   const div = document.createElement("div");
   div.className = "root";
   const style = document.createElement("style");
@@ -7,6 +8,7 @@ export function initWelcomePage(params) {
   const imgTijera = require("url:../../components/image/tijera.svg");
   style.innerHTML = `
   .root{
+    background-image: url(${imgFondo});
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,12 +38,49 @@ export function initWelcomePage(params) {
   }
   .img{
     width: 100px;
-    height: 100px;
+    height: 185px;
+    margin: 10px;
   }
+  
   @media (max-width: 460px) {
     .img {
       width: 80px;
-      height: 80px;
+      height: auto;
+    }
+  }
+
+  .img-piedra {
+    animation: flotar1 2s ease-in-out infinite;
+  }
+  .img-papel {
+    animation: flotar2 2s ease-in-out infinite;
+  }
+  .img-tijera {
+    animation: flotar3 2s ease-in-out infinite;
+  }
+ 
+  @keyframes flotar1 {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes flotar2 {
+    0%, 100% {
+      transform: translateY(-10px);
+    }
+    50% {
+      transform: translateY(0);
+    }
+  }
+  @keyframes flotar3 {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
     }
   }
   `;
@@ -50,9 +89,9 @@ export function initWelcomePage(params) {
   <my-text tag="h1" class="title">Piedra, Papel ó Tijera</my-text>
   <button-component>Empezar</button-component>
   <div class="contenedor-imagenes">
-    <img class="img" src=${imgPiedra}>
-    <img class="img" src=${imgPapel}>
-    <img class="img" src=${imgTijera}>
+    <img class="img img-piedra" src=${imgPiedra}>
+    <img class="img img-papel" src=${imgPapel}>
+    <img class="img img-tijera" src=${imgTijera}>
   </div>
   `;
   div.querySelector("button-component")?.addEventListener("click", () => {
